@@ -136,3 +136,5 @@ def Creer_dataFrame_stocks(my_dict, periode, data_type, suppr_nan_by):
 
 # //////// Si vous voulez enregistrer les données du DataFrame dans un fichier Excel :
 # df_CAC40_Returns_row.to_excel("CAC40_Returns.xlsx")
+
+print('test')
