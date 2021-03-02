@@ -111,11 +111,11 @@ def Creer_dataFrame_stocks(my_dict, periode, data_type, suppr_nan_by):
 
 # Chemin ou se trouve le fichier excel contenant tout les tickers
 
-chemin_fichier_ticker = r"C:\Users\thiba\OneDrive - De Vinci\Documents\éducation\ESILV\2020-2021\S7\Pi2\ticker_stocks.xlsx"
+# chemin_fichier_ticker = r"C:\Users\thiba\OneDrive - De Vinci\Documents\éducation\ESILV\2020-2021\S7\Pi2\ticker_stocks.xlsx"
 
 # Création du dictionnaire contenant tout les ticker
-tickers_CAC40_dict = Recuper_tickers_in_dict(chemin_fichier_ticker, "CAC40")
-print(tickers_CAC40_dict)
+# tickers_CAC40_dict = Recuper_tickers_in_dict(chemin_fichier_ticker, "CAC40")
+# print(tickers_CAC40_dict)
 # tickers_SP500_dict=Recuper_tickers_in_dict(chemin_fichier_ticker,"S&P500")
 
 
@@ -125,7 +125,7 @@ print(tickers_CAC40_dict)
 # df_CAC40_Returns_col=Creer_dataFrame_stocks(tickers_CAC40_dict,"5d",data_type='returns',suppr_nan_by='col')
 
 # DataFrame contenant les rendement du CAC40, avec une suppression des NaN par ligne
-df_CAC40_Returns_row = Creer_dataFrame_stocks(tickers_CAC40_dict, "2y", data_type='returns', suppr_nan_by='row')
+# df_CAC40_Returns_row = Creer_dataFrame_stocks(tickers_CAC40_dict, "2y", data_type='returns', suppr_nan_by='row')
 
 # DataFrame contenant les prix du CAC40, avec une suppression des NaN par colonne
 # df_CAC40_Price_col=Creer_dataFrame_stocks(tickers_CAC40_dict,"5d",data_type='prices',suppr_nan_by='col')
