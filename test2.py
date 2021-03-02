@@ -35,3 +35,5 @@ for key, value in tickers_CAC40_dict.items():
         print('key {} value {}'.format(key, value))
 
 print(df.shape[1])
+
+print('bonjour')
