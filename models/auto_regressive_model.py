@@ -1,30 +1,13 @@
 import matplotlib.pyplot as plt
 from statsmodels.tsa.api import VAR
+import annex.constants as const
 
 from pca import *
 
 if __name__ == '__main__':
-    tickers_CAC40_dict = {'Accor': 'AC.PA', 'Air Liquide': 'AI.PA',
-                          'Airbus': 'AIR.PA', 'ArcelorMittal': 'MT.AS',
-                          'Atos': 'ATO.PA', 'AXA': 'CS.PA',
-                          'BNP Paribas': 'BNP.PA', 'Bouygues': 'EN.PA',
-                          'Capgemini': 'CAP.PA', 'Carrefour': 'CA.PA',
-                          'Crédit Agricole': 'ACA.PA', 'Danone': 'BN.PA',
-                          'Dassault Systèmes': 'DSY.PA', 'Engie': 'ENGI.PA',
-                          'Essilor': 'EL.PA', 'Hermès': 'RMS.PA',
-                          'Kering': 'KER.PA', "L'Oréal": 'OR.PA',
-                          'Legrand': 'LR.PA', 'LVMH': 'MC.PA',
-                          'Michelin': 'ML.PA', 'Orange': 'ORA.PA',
-                          'Pernod Ricard': 'RI.PA', 'PSA': 'UG.PA',
-                          'Publicis': 'PUB.PA', 'Renault': 'RNO.PA',
-                          'Safran': 'SAF.PA', 'Saint-Gobain': 'SGO.PA',
-                          'Sanofi': 'SAN.PA', 'Schneider Electric': 'SU.PA', 'Société Générale': 'GLE.PA',
-                          'Sodexo': 'SW.PA', 'STMicroelectronics': 'STM.PA', 'Thales': 'HO.PA', 'Total': 'FP.PA',
-                          'Unibail-Rodamco-Westfield': 'URW.AS', 'Veolia': 'VIE.PA', 'Vinci': 'DG.PA',
-                          'Vivendi': 'VIV.PA', 'Worldline': 'WLN.PA', 'CAC40': '^FCHI'}
 
     period = '6mo'
-    # array_of_principal_component = create_principal_components_array(tickers_CAC40_dict, period)
+    # array_of_principal_component = create_principal_components_array(const.tickers_CAC40_dict, period)
     # Create train and test set
     array_of_principal_component = np.array([[-0.00739105, -0.02305929, -0.02998845, -0.0181435, -0.00411993],
                                              [-0.07759111, -0.02769151, -0.01018943, 0.00548652, -0.01850119],
@@ -120,6 +103,7 @@ if __name__ == '__main__':
                          [0.08158428, -0.00721101, -0.02552157, 0.00482874, 0.03327702],
                          [0.01251324, -0.04992081, -0.02570997, -0.0254297, -0.01560174]])
 
+    # Creation of the VAR model
     model = VAR(training_set)
 
     model.select_order()
