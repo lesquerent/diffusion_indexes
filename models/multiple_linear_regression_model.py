@@ -60,6 +60,7 @@ if __name__ == '__main__':
 
     # Remove CAC40 index from de DF
     df_cac40_stock_returns = df_cac40_stock_returns.drop(['CAC40'], axis=1)
+    df_cac40_stock_returns.drop(df_cac40_stock_returns.head(1).index, inplace=True)
 
     x, y = array_of_principal_component[1:, :], df_cac40_stock_returns.iloc[:, 7]
 
@@ -76,7 +77,7 @@ if __name__ == '__main__':
 
     plt.scatter(x[:, 0], y)
     plt.scatter(x[:, 0], model(X, theta), c='r')
-
+    plt.show()
     print('Cost function : {}'.format(cost_function(X, y, theta)))
 
     # Gadient
@@ -92,5 +93,6 @@ if __name__ == '__main__':
 
     plt.scatter(x[:, 4], y)
     plt.scatter(x[:, 4], predictions, c='r')
-
+    plt.show()
     plt.plot(range(n_iterations), cost_history)
+    plt.show()
