@@ -1,6 +1,8 @@
 import numpy as np
 from data_processing import *
 from sklearn import decomposition
+from numpy import linalg as LA
+
 
 
 def select_component(pca_data, percent):
@@ -49,6 +51,7 @@ def create_principal_components_array(dict_of_tickers, history_period='3mo'):
     # Removal of values from the CAC40 index
     cac40_stocks_returns = CAC40_Stocks_returns.drop(['CAC40'], axis=1)
 
+    # PCA with sklearn module
     pca = decomposition.PCA(n_components=31).fit(cac40_stocks_returns)
 
     # Select_component, function that calculates the number of components such that x% of the information is explained
@@ -58,6 +61,68 @@ def create_principal_components_array(dict_of_tickers, history_period='3mo'):
     array_of_principal_components = array_of_principal_components.transform(cac40_stocks_returns)
 
     return array_of_principal_components
+
+
+def marchenko_pastur_pdf1(l, Q):
+    """
+
+    Parameters
+    ----------
+    l : float
+        Correspond to a float which will give us pdf(l)
+    Q : float
+        Corresponds to the
+
+    Returns
+    -------
+    Value of the Marchenko Pastur Pdf evaluate in l
+
+    """
+
+    def m0(a):
+        # Element wise maximum of (a,0)
+        return np.maximum(a, np.zeros_like(a))
+
+    l_plus = (1 + (1/Q) ** 0.5) ** 2
+    l_min = (1 - (1/Q) ** 0.5) ** 2
+    return Q * np.sqrt(m0(l_plus - l) * m0(l - l_min)) / (2 * np.pi * l)
+
+
+def principal_component(dict_of_tickers, history_period='3mo'):
+
+    # DataFrame containing CAC40 stock returns, with NaN suppression per line
+    CAC40_Stocks_returns = create_stocks_df(dict_of_tickers, history_period)
+
+    # Removal of values from the CAC40 index
+    cac40_stocks_returns = CAC40_Stocks_returns.drop(['CAC40'], axis=1)
+
+    # PCA with sklearn module
+    pca = decomposition.PCA(n_components=31).fit(cac40_stocks_returns)
+
+    # Correlation matrix
+    cor_matrix = CAC40_Stocks_returns.interpolate().corr()
+
+    # M : number of line and  N : number de column
+    M, N = CAC40_Stocks_returns.shape
+    Q = M / N
+
+    print(M, N)
+
+    # Eigenvalue and eigenvector of the correlation matrix
+    eigenval, eigenvec = LA.eig(cor_matrix)
+
+    # Variance of the eigenvalues
+    sigma = np.var(eigenval)
+
+    # Array that we will return
+    array_of_PC = []
+
+    for i in range(N):
+        if eigenval[i] < marchenko_pastur_pdf1(eigenval[i]):
+            array_of_PC.append(eigenvec[i])
+
+    return array_of_PC
+
 
 
 if __name__ == '__main__':
@@ -77,3 +142,5 @@ if __name__ == '__main__':
     period = '3mo'  # Period of history (valid periods: 1d,5d,1mo,3mo,6mo,1y,2y,5y,10y,ytd,max)
     # np.array containing the principal components :
     array_of_principal_component = create_principal_components_array(tickers_CAC40_dict, period)
+
+
