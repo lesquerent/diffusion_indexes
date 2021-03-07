@@ -4,6 +4,8 @@ from sklearn import decomposition
 from numpy import linalg as LA
 
 
+
+
 def select_component(pca_data, percent):
     """
     Returns the number of components such that percent% of the information is explained.
