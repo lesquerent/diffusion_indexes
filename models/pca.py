@@ -2,6 +2,7 @@ import numpy as np
 from data_processing import *
 from sklearn import decomposition
 from numpy import linalg as LA
+import annex.constants as const
 
 
 
@@ -126,21 +127,9 @@ def principal_component(dict_of_tickers, history_period='3mo'):
 
 
 if __name__ == '__main__':
-    tickers_CAC40_dict = {'Air Liquide': 'AI.PA', 'Airbus': 'AIR.PA', 'Alstom': 'ALO.PA', 'ArcelorMittal': 'MT.AS',
-                          'Atos': 'ATO.PA', 'AXA': 'CS.PA', 'BNP Paribas': 'BNP.PA', 'Bouygues': 'EN.PA',
-                          'Capgemini': 'CAP.PA', 'Carrefour': 'CA.PA', 'Crédit Agricole': 'ACA.PA', 'Danone': 'BN.PA',
-                          'Dassault Systèmes': 'DSY.PA', 'Engie': 'ENGI.PA', 'EssilorLuxottica': 'EL.PA',
-                          'Hermès': 'RMS.PA', 'Kering': 'KER.PA', "L'Oréal": 'OR.PA', 'Legrand': 'LR.PA',
-                          'LVMH': 'MC.PA',
-                          'Michelin': 'ML.PA', 'Orange': 'ORA.PA', 'Pernod Ricard': 'RI.PA', 'Publicis': 'PUB.PA',
-                          'Renault': 'RNO.PA', 'Safran': 'SAF.PA', 'Saint-Gobain': 'SGO.PA', 'Sanofi': 'SAN.PA',
-                          'Schneider Electric': 'SU.PA', 'Société Générale': 'GLE.PA', 'Stellantis': 'STLA.PA',
-                          'STMicroelectronics': 'STM.PA', 'Teleperformance': 'TEP.PA', 'Thales': 'HO.PA',
-                          'Total': 'FP.PA', 'Unibail-Rodamco-Westfield': 'URW.AS', 'Veolia': 'VIE.PA', 'Vinci': 'DG.PA',
-                          'Vivendi': 'VIV.PA', 'Worldline': 'WLN.PA'}
 
     period = '3mo'  # Period of history (valid periods: 1d,5d,1mo,3mo,6mo,1y,2y,5y,10y,ytd,max)
     # np.array containing the principal components :
-    array_of_principal_component = create_principal_components_array(tickers_CAC40_dict, period)
+    array_of_principal_component = create_principal_components_array(const.tickers_CAC40_dict, period)
 
 
