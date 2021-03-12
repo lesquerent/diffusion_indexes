@@ -2,10 +2,9 @@ from sklearn import decomposition
 from sklearn.linear_model import LinearRegression
 
 import annex.constants as const
-from data_processing import create_stocks_df
+from indexes_forcasting.functions.data_processing import create_stocks_df
 from models.pca import select_component
 from statsmodels.tsa.api import VAR
-import matplotlib.pyplot as plt
 
 
 def create_forecast_return_array(dict_of_tickers, history_period='6mo'):

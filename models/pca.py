@@ -1,5 +1,5 @@
 import numpy as np
-from data_processing import *
+from indexes_forcasting.functions.data_processing import *
 from sklearn import decomposition
 from numpy import linalg as LA
 import annex.constants as const

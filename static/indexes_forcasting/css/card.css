@@ -1,0 +1,24 @@
+#logo{
+}
+
+body{
+	background-color: #fff;
+}
+
+
+#preview-index{
+	background-color:#9BC2E6;
+}
+
+
+#current-index{
+	background-color:#EC9DF9;
+}
+
+#forcast-index-pos{
+	background-color:#A9D08E;
+}
+
+#forcast-index-neg{
+	background-color:#FE6868;
+}

@@ -1,0 +1,69 @@
+
+{% extends 'indexes_forcasting/main_template/main_template.html' %}
+
+{% load static %}
+
+
+{% block content %}
+<link rel="stylesheet" type="text/css" href="{% static 'indexes_forcasting/css/card.css' %}">
+
+	
+<br>
+<br>
+<br>
+<br>
+<div class="row">
+	<div class="col">
+		<div class="col-md">
+   			<div class="card text-center text-white  mb-3" id="forcast-index-neg" >
+				<div class="card-header">
+       				<h5 class="card-title">CAC40 (^FCHI) index</h5>
+      			</div>
+	     		<div class="card-body">
+	        		<div class="row">
+						<div class="col">
+							<div class="col-md">
+						 		<div class="card text-center text-white  mb-3" id="preview-index" >
+						    		<div class="card-header">
+						    			<h5 class="card-title">Previous closeur index</h5>
+						      		</div>
+						      		<div class="card-body">
+						        		<h3 class="card-title">{{previous_index}}</h3>
+						      		</div>
+						   		</div>
+						  	</div>
+						</div>
+
+				 <div class="col">
+				  <div class="col-md">
+				   <div class="card text-center text-white  mb-3" id="current-index">
+				      <div class="card-header">
+				       <h5 class="card-title">Current index</h5>
+				      </div>
+				      <div class="card-body">
+				        <h3 class="card-title">{{current_index}}</h3>
+				      </div>
+				   </div>
+				  </div>
+				 </div>
+
+				 <div class="col">
+				  <div class="col-md">
+				   <div class="card text-center text-white  mb-3" id="forcast-index-pos">
+				      <div class="card-header">
+				       <h5 class="card-title">Tomorrow forcast index</h5>
+				      </div>
+				      <div class="card-body">
+				        <h3 class="card-title">{{forcast_index}}</h3>
+				      </div>
+				   </div>
+				  </div>
+				 </div>
+			</div>
+	      </div>
+   </div>
+  </div>
+ </div>
+</div>
+
+{% endblock %}
