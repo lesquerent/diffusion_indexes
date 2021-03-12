@@ -7,7 +7,6 @@ Created on Sat Jan 16 15:52:07 2021
 
 import yfinance as yf
 import pandas as pd
-import datetime
 TICKER = '^FCHI'
 PERIOD = '2y'
 

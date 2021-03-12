@@ -5,9 +5,10 @@ Created on Thu Jan 14 21:29:18 2021
 @author: thiba
 """
 
-#Importation pour la valeur actuelle du CAC
+# Importation pour la valeur actuelle du CAC
 import bs4
-import  requests
+import requests
+
 
 def real_time_value(ticker):
     """
@@ -25,23 +26,22 @@ def real_time_value(ticker):
 
     """
 
-    #Défini l'url
-    url =('https://fr.finance.yahoo.com/quote/')+ticker+('/')
-    #Creer la requete
+    # Défini l'url
+    url = ('https://fr.finance.yahoo.com/quote/') + ticker + ('/')
+    # Creer la requete
     r = requests.get(url)
 
-    #Recupere le contenu du text de la requete
+    # Recupere le contenu du text de la requete
     web_content = bs4.BeautifulSoup(r.text, 'lxml')
 
-    #Cherche l'element correspondant sur la page
-    web_content=web_content.find('div',{'class':'My(6px) Pos(r) smartphone_Mt(6px)'})
+    # Cherche l'element correspondant sur la page
+    web_content = web_content.find('div', {'class': 'My(6px) Pos(r) smartphone_Mt(6px)'})
 
     web_content = web_content.find('span').text
 
-    if web_content ==[]:
+    if web_content == []:
         web_content = 'REFRESH'
     return web_content
-
 
 
 def last_closure_value(ticker):
@@ -60,24 +60,24 @@ def last_closure_value(ticker):
 
     """
 
-    #Défini l'url
-    url =('https://fr.finance.yahoo.com/quote/')+ticker+('/')
-    #Creer la requete
+    # Défini l'url
+    url = ('https://fr.finance.yahoo.com/quote/') + ticker + ('/')
+    # Creer la requete
     r = requests.get(url)
 
-    #Recupere le contenu du text de la requete
+    # Recupere le contenu du text de la requete
     web_content = bs4.BeautifulSoup(r.text, 'lxml')
 
-    #Cherche l'element correspondant sur la page
-    web_content=web_content.find('td',{'class':'Ta(end) Fw(600) Lh(14px)'})
+    # Cherche l'element correspondant sur la page
+    web_content = web_content.find('td', {'class': 'Ta(end) Fw(600) Lh(14px)'})
 
     web_content = web_content.find('span').text
 
-    if web_content ==[]:
+    if web_content == []:
         web_content = 'REFRESH'
 
     return web_content
 
-#ticker_cac = '%5EFCHI'
-#print(last_closure_value(ticker_cac))
-#print(real_time_value(ticker_cac))
+# ticker_cac = '%5EFCHI'
+# print(last_closure_value(ticker_cac))
+# print(real_time_value(ticker_cac))
