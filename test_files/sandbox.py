@@ -56,6 +56,7 @@ def create_forecast_return_array(dict_of_tickers, history_period='6mo'):
 
     return array_of_forecast_pc
 
+
 def make_prediction(period):
     forecast_return_ = create_forecast_return_array(const.tickers_CAC40_dict)
     # print(forecast_return_)
@@ -88,6 +89,7 @@ def make_prediction(period):
     # plt.plot(df_index.index, predictions)
     # plt.show()
     return predictions[-1]
+
 
 def main1():
     forecast_return_ = create_forecast_return_array(const.tickers_CAC40_dict)
@@ -136,7 +138,9 @@ if __name__ == "__main__":
     cac_prediction_2y = int(round(make_prediction('2y')))
     cac_prediction_1y = int(round(make_prediction('1y')))
 
-    print('La prevision du CAC40 pour ce soir est {} se basant sur les données des 6 derniers mois.'.format(cac_prediction_6mo))
-    print('La prevision du CAC40 pour ce soir est {} se basant sur les données des 12 derniers mois.'.format(cac_prediction_1y))
-    print('La prevision du CAC40 pour ce soir est {} se basant sur les données des 24 derniers mois.'.format(cac_prediction_2y))
-
+    print('La prevision du CAC40 pour ce soir est {} se basant sur les données des 6 derniers mois.'.format(
+        cac_prediction_6mo))
+    print('La prevision du CAC40 pour ce soir est {} se basant sur les données des 12 derniers mois.'.format(
+        cac_prediction_1y))
+    print('La prevision du CAC40 pour ce soir est {} se basant sur les données des 24 derniers mois.'.format(
+        cac_prediction_2y))
