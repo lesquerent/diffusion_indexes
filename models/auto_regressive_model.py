@@ -6,20 +6,12 @@ import models
 from pca import *
 
 
-def create_var_model(training_set):
-    """
-
-    :param training_set: dataset for training
-    :return:
-        var_model : the statsmodels.tsa.api.VAR model corresponding to the dataset
-        lag_order : corresponding to the lag order of the model
-    """
-    var_model = VAR(training_set)
-
-    var_model.select_order()
-    var_model = var_model.fit(ic='aic')
-    lag_order = var_model.k_ar
-    return var_model, lag_order
+def create_var_model(data):
+    model = VAR(data)
+    results = model.fit(ic='aic')
+    # lag_order = results.k_ar
+    # print('lag order : {}'.format(lag_order))
+    return results
 
 
 def main2():
@@ -175,5 +167,23 @@ def main1():
 
 
 if __name__ == '__main__':
-    main1()
+    # main1()
     # main2()
+    # DataFrame containing CAC40 stock returns, with NaN suppression per line
+    CAC40_Stocks_returns = create_stocks_df(const.tickers_CAC40_dict, '6mo')
+
+    # Removal of values from the CAC40 index
+    cac40_stocks_returns = CAC40_Stocks_returns.drop(['CAC40'], axis=1)
+
+    # PCA with sklearn module
+    pca = decomposition.PCA(n_components=40).fit(cac40_stocks_returns)
+
+    # Select_component, function that calculates the number of components such that x% of the information is explained
+    nb_component = select_component(pca, 95)
+
+    array_of_principal_components = decomposition.PCA(n_components=40).fit(cac40_stocks_returns)
+
+    array_of_principal_components = array_of_principal_components.transform(cac40_stocks_returns)
+    model = create_var_model(array_of_principal_components)
+
+    models.save_model(model, 'var_model_v1.pickle')
