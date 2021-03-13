@@ -5,6 +5,7 @@ import annex.constants as const
 from indexes_forcasting.functions.data_processing import create_stocks_df
 from models.pca import select_component
 from statsmodels.tsa.api import VAR
+from models import models
 
 
 def create_forecast_return_array(dict_of_tickers, history_period='6mo'):
@@ -33,7 +34,7 @@ def create_forecast_return_array(dict_of_tickers, history_period='6mo'):
     cac40_stocks_returns = CAC40_Stocks_returns.drop(['CAC40'], axis=1)
 
     # PCA with sklearn module
-    pca = decomposition.PCA(n_components=40).fit(cac40_stocks_returns)
+    pca = decomposition.PCA(n_components=cac40_stocks_returns.shape[1]).fit(cac40_stocks_returns)
 
     # Select_component, function that calculates the number of components such that x% of the information is explained
     nb_component = select_component(pca, 95)
@@ -41,14 +42,12 @@ def create_forecast_return_array(dict_of_tickers, history_period='6mo'):
     array_of_principal_components = decomposition.PCA(n_components=40).fit(cac40_stocks_returns)
     array_of_principal_components = array_of_principal_components.transform(cac40_stocks_returns)
 
-    model = VAR(array_of_principal_components)
+    var_model = models.open_model('var_model_2y_v1.pickle')
 
-    model.select_order()
-    results = model.fit(ic='aic')
+    lag_order = var_model[1]
+    var_model = var_model[0]
 
-    lag_order = results.k_ar
-
-    array_of_forecast_pc = results.forecast(array_of_principal_components[-lag_order:], 1)
+    array_of_forecast_pc = var_model.forecast(array_of_principal_components[-lag_order:], 1)
 
     forecast_return = pca.inverse_transform(array_of_forecast_pc)
 
@@ -135,12 +134,12 @@ def main2():
 if __name__ == "__main__":
     # main1()
     cac_prediction_6mo = int(round(make_prediction('6mo')))
-    cac_prediction_2y = int(round(make_prediction('2y')))
-    cac_prediction_1y = int(round(make_prediction('1y')))
+    # cac_prediction_2y = int(round(make_prediction('2y')))
+    # cac_prediction_1y = int(round(make_prediction('1y')))
 
     print('La prevision du CAC40 pour ce soir est {} se basant sur les données des 6 derniers mois.'.format(
         cac_prediction_6mo))
-    print('La prevision du CAC40 pour ce soir est {} se basant sur les données des 12 derniers mois.'.format(
-        cac_prediction_1y))
-    print('La prevision du CAC40 pour ce soir est {} se basant sur les données des 24 derniers mois.'.format(
-        cac_prediction_2y))
+    # print('La prevision du CAC40 pour ce soir est {} se basant sur les données des 12 derniers mois.'.format(
+    #     cac_prediction_1y))
+    # print('La prevision du CAC40 pour ce soir est {} se basant sur les données des 24 derniers mois.'.format(
+    #     cac_prediction_2y))
