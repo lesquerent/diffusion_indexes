@@ -48,7 +48,7 @@ def gradient_descent(X, y, theta, learning_rate, n_iterations):
     return theta, cost_history
 
 
-if __name__ == '__main__':
+def main1():
     # Regression example :
     period = '3mo'
     # np.array containing the main components :
@@ -88,7 +88,7 @@ if __name__ == '__main__':
 
     print(theta_final)
 
-    #Predictions
+    # Predictions
     predictions = model(X, theta_final)
 
     plt.scatter(x[:, 4], y)
@@ -96,3 +96,6 @@ if __name__ == '__main__':
     plt.show()
     plt.plot(range(n_iterations), cost_history)
     plt.show()
+
+if __name__ == '__main__':
+   main1()
