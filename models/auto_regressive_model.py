@@ -52,7 +52,6 @@ def main2():
 
 def main1():
     period = '6mo'
-    # array_of_principal_component = create_principal_components_array(const.tickers_CAC40_dict, period)
     # Create train and test set
     array_of_principal_component = np.array([[-0.00739105, -0.02305929, -0.02998845, -0.0181435, -0.00411993],
                                              [-0.07759111, -0.02769151, -0.01018943, 0.00548652, -0.01850119],
@@ -147,6 +146,8 @@ def main1():
                          [-0.04310025, -0.03247746, -0.06978119, 0.01660314, 0.01344106],
                          [0.08158428, -0.00721101, -0.02552157, 0.00482874, 0.03327702],
                          [0.01251324, -0.04992081, -0.02570997, -0.0254297, -0.01560174]])
+    array_of_principal_component = create_principal_components_array(const.tickers_CAC40_dict, period)
+    training_set = array_of_principal_component
 
     # Creation of the VAR model
     model = VAR(training_set)
@@ -174,5 +175,5 @@ def main1():
 
 
 if __name__ == '__main__':
-    # main1()
-    main2()
+    main1()
+    # main2()
