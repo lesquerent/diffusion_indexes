@@ -22,7 +22,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'w@x1w^6$-g9##d@&)k!+6^dwl7v&)p@jphff(tnjg9e^b-%jh('
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['beta-diffusion-indexes.herokuapp.com', '127.0.0.1']
 
