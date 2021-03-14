@@ -1,5 +1,5 @@
 import annex.constants as const
-from models.pca import create_principal_components_array
+from global_models.pca_model import create_principal_components_array
 from indexes_forcasting.functions.data_processing import create_stocks_df
 from matplotlib import pyplot as plt
 import numpy as np

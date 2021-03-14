@@ -2,7 +2,7 @@ from sklearn.linear_model import LinearRegression
 
 from indexes_forcasting.functions.data_processing import create_stocks_df
 import annex.constants as const
-import models
+import global_models
 
 
 def create_linear_model(period='6mo'):
@@ -20,4 +20,4 @@ def create_linear_model(period='6mo'):
 
 if __name__ == '__main__':
     model = create_linear_model()
-    models.save_model(model, 'saved_trained_models/linear_model_v1.pickle')
+    global_models.save_model(model, 'saved_trained_models/linear_model_v1.pickle')

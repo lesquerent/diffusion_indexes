@@ -7,11 +7,12 @@ Created on Sat Jan 16 15:52:07 2021
 
 import yfinance as yf
 import pandas as pd
+
 TICKER = '^FCHI'
 PERIOD = '2y'
 
 
-def take_stock_value_and_date(ticker,period):
+def take_stock_value_and_date(ticker, period):
     """
 
 
@@ -30,19 +31,21 @@ def take_stock_value_and_date(ticker,period):
 
     """
 
-    data= yf.Ticker(ticker).history(period)["High"]
+    data = yf.Ticker(ticker).history(period)["High"]
     dataFrame = pd.DataFrame()
 
-    dataFrame.insert(0,ticker,data)
+    dataFrame.insert(0, ticker, data)
 
     value_list = dataFrame[ticker].values.tolist()
 
     date_list_span = dataFrame.index.tolist()
-    date_list=[]
+    date_list = []
     for date_span in date_list_span:
         date_list.append(str(date_span)[:10])
 
-    return [date_list,value_list]
+    return [date_list, value_list]
 
-dr = take_stock_value_and_date(TICKER,PERIOD)
 
+if __name__ =='__main__':
+
+    dr = take_stock_value_and_date(TICKER, PERIOD)

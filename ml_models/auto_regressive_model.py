@@ -1,9 +1,9 @@
 import matplotlib.pyplot as plt
 from statsmodels.tsa.api import VAR
 import annex.constants as const
-import models
+import global_models
 
-from pca import *
+from pca_model import *
 
 
 def create_var_model(data):
@@ -21,10 +21,10 @@ def main2():
     #
     # # Creation of the VAR model
     # model = create_var_model(array_of_principal_component)[0]
-    # models.save_model(model, 'var_model_2y_v1.pickle')
+    # ml_models.save_model(model, 'var_model_2y_v1.pickle')
     # Plotting input time series:
 
-    var_model = models.open_model('var_model_2y_v1.pickle')
+    var_model = global_models.open_model('var_model_2y_v1.pickle')
     var_model.plot()
     plt.show()
 
@@ -186,4 +186,4 @@ if __name__ == '__main__':
     array_of_principal_components = array_of_principal_components.transform(cac40_stocks_returns)
     model = create_var_model(array_of_principal_components)
 
-    models.save_model(model, 'saved_trained_models/var_model_v1.pickle')
+    global_models.save_model(model, 'saved_trained_models/var_model_v1.pickle')

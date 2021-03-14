@@ -78,6 +78,9 @@ def last_closure_value(ticker):
 
     return web_content
 
-# ticker_cac = '%5EFCHI'
-# print(last_closure_value(ticker_cac))
-# print(real_time_value(ticker_cac))
+
+if __name__ == '__main__':
+
+    ticker_cac = '%5EFCHI'
+    print(last_closure_value(ticker_cac))
+    print(real_time_value(ticker_cac))
