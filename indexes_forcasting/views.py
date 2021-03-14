@@ -13,11 +13,11 @@ def home(request):
     previous_closure = value_functions.last_closure_value(ticker_cac)
     actual_value = value_functions.real_time_value(ticker_cac)
     forecast_value = int(round(sandbox.make_prediction('6mo')))
-
+    print(forecast_value)
     context = {
         'previous_index': previous_closure,
         'current_index': actual_value,
-        'forcast_indexes': forecast_value,
+        'forcast_index': forecast_value,
     }
 
     return render(request, 'indexes_forcasting/home/home.html', context)

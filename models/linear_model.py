@@ -12,12 +12,12 @@ def create_linear_model(period='6mo'):
     df_price = df_price.drop(['CAC40'], axis=1)
     # Model
 
-    model = LinearRegression()
-    model.fit(df_price, df_index)
-    model.score(df_price, df_index)
-    return model
+    linear_model = LinearRegression()
+    linear_model.fit(df_price, df_index)
+    # linear_model.score(df_price, df_index)
+    return linear_model
 
 
 if __name__ == '__main__':
     model = create_linear_model()
-    models.save_model(model, 'linear_model_v1.pickle')
+    models.save_model(model, 'saved_trained_models/linear_model_v1.pickle')

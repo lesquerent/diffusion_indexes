@@ -7,8 +7,8 @@ from pca import *
 
 
 def create_var_model(data):
-    model = VAR(data)
-    results = model.fit(ic='aic')
+    var_model = VAR(data)
+    results = var_model.fit(ic='aic')
     # lag_order = results.k_ar
     # print('lag order : {}'.format(lag_order))
     return results
@@ -186,4 +186,4 @@ if __name__ == '__main__':
     array_of_principal_components = array_of_principal_components.transform(cac40_stocks_returns)
     model = create_var_model(array_of_principal_components)
 
-    models.save_model(model, 'var_model_v1.pickle')
+    models.save_model(model, 'saved_trained_models/var_model_v1.pickle')
