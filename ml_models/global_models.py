@@ -22,8 +22,8 @@ def save_model(my_model, file_name):  # ex : file_name = "trained_model.pickle"
 
 
 def open_model(file_name):
-    base_dir = 'ml_models\\saved_trained_models'
-    # base_dir = 'saved_trained_models'
+    # base_dir = 'ml_models\\saved_trained_models'
+    base_dir = 'saved_trained_models'
     file_path = os.path.join(base_dir, file_name)
     print('file path : {}'.format(file_path))
     if os.path.exists(file_path):
