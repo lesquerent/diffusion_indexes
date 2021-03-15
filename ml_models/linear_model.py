@@ -1,13 +1,12 @@
 from sklearn.linear_model import LinearRegression
-
-from indexes_forcasting.functions.data_processing import create_stocks_df_period
 import annex.constants as const
-import global_models
+from data_processing import create_stocks_df_period
+from ml_models import global_models
+from ml_models.functions import save_model
 
 
-def create_linear_model(period='6mo'):
+def create_linear_model(df_price):
     # CAC40 index linear reg
-    df_price = create_stocks_df_period(const.tickers_CAC40_dict, period, data_type='prices', remove_nan_by='row')
     df_index = df_price['CAC40']
     df_price = df_price.drop(['CAC40'], axis=1)
     # Model
@@ -19,5 +18,7 @@ def create_linear_model(period='6mo'):
 
 
 if __name__ == '__main__':
-    model = create_linear_model('1y')
-    global_models.save_model(model, 'saved_trained_models/linear_model_v2_1y.pickle')
+    cac40_stocks_prices = global_models.open_model('cac40_stocks_prices_20_01_01_21_15_03.pickle')
+
+    model = create_linear_model(cac40_stocks_prices)
+    save_model(model, 'saved_trained_models/linear_model_v2_1y.pickle')

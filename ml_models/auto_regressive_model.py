@@ -1,9 +1,11 @@
+import numpy as np
+from sklearn import decomposition
+
+from ml_models import global_models
 import matplotlib.pyplot as plt
 from statsmodels.tsa.api import VAR
-import annex.constants as const
-import global_models
-
-from pca_model import *
+from annex import constants as const
+from ml_models.pca_model import create_principal_components_array, select_component
 
 
 def create_var_model(data):
@@ -170,10 +172,10 @@ if __name__ == '__main__':
     # main1()
     # main2()
     # DataFrame containing CAC40 stock returns, with NaN suppression per line
-    CAC40_Stocks_returns = create_stocks_df_period(const.tickers_CAC40_dict, '1y')
+    cac40_stocks_returns = global_models.open_model('cac40_stocks_returns_20_01_01_21_15_03.pickle')
 
     # Removal of values from the CAC40 index
-    cac40_stocks_returns = CAC40_Stocks_returns.drop(['CAC40'], axis=1)
+    cac40_stocks_returns = cac40_stocks_returns.drop(['CAC40'], axis=1)
 
     # PCA with sklearn module
     pca = decomposition.PCA(n_components=cac40_stocks_returns.shape[1]).fit(cac40_stocks_returns)
@@ -181,7 +183,8 @@ if __name__ == '__main__':
     # Select_component, function that calculates the number of components such that x% of the information is explained
     nb_component = select_component(pca, 95)
 
-    array_of_principal_components = decomposition.PCA(n_components=cac40_stocks_returns.shape[1]).fit(cac40_stocks_returns)
+    array_of_principal_components = decomposition.PCA(n_components=cac40_stocks_returns.shape[1]).fit(
+        cac40_stocks_returns)
 
     array_of_principal_components = array_of_principal_components.transform(cac40_stocks_returns)
     model = create_var_model(array_of_principal_components)

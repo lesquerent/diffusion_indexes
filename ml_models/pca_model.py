@@ -1,10 +1,10 @@
 import numpy as np
-from indexes_forcasting.functions.data_processing import *
 from sklearn import decomposition
 from numpy import linalg as LA
 import annex.constants as const
 import statsmodels
 import annex
+from data_processing import create_stocks_df_period
 
 
 def select_component(pca_data, percent):
