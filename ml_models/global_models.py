@@ -2,7 +2,7 @@ import os
 import pickle
 
 from sklearn import decomposition
-
+from django.conf import settings
 from annex import constants as const
 from indexes_forcasting.functions.data_processing import create_stocks_df_period
 import annex
@@ -10,8 +10,12 @@ from ml_models import pca_model
 
 
 def save_model(my_model, file_name):  # ex : file_name = "trained_model.pickle"
-    base_dir = '/'
-    file_path = base_dir + file_name
+    # base_dir = '/'
+    # file_path = base_dir + file_name
+    BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    models_folder = os.path.join(BASE_DIR, os.path.basename('ml_models'))
+    models_folder = os.path.join(models_folder, os.path.basename('saved_trained_models'))
+    file_path = os.path.join(models_folder, os.path.basename(file_name))
     if os.path.exists(file_path):
         print("Model already exists")
 
@@ -22,10 +26,15 @@ def save_model(my_model, file_name):  # ex : file_name = "trained_model.pickle"
 
 
 def open_model(file_name):
-    base_dir = 'ml_models\\saved_trained_models'
+    # base_dir = 'ml_models\\saved_trained_models'
     # base_dir = 'saved_trained_models'
-    file_path = os.path.join(base_dir, file_name)
-    print('file path : {}'.format(file_path))
+    # file_path = os.path.join(base_dir, file_name)
+    BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+    models_folder = os.path.join(BASE_DIR, os.path.basename('ml_models'))
+    models_folder = os.path.join(models_folder, os.path.basename('saved_trained_models'))
+    file_path = os.path.join(models_folder, os.path.basename(file_name))
+    print(file_path)
     if os.path.exists(file_path):
         print("Loading Trained Model")
         model = pickle.load(open(file_path, "rb"))
@@ -43,7 +52,7 @@ def make_prediction(data_returns, data_prices, nb_of_forecast=1):
     pca = pc_pca[1]
 
     # VAR
-    results = open_model('var_model_v1.pickle')
+    results = open_model('var_model_v2_1y.pickle')
     lag_order = results.k_ar
     array_of_forecast_pc = results.forecast(array_of_principal_components[-lag_order:], nb_of_forecast)
 
@@ -54,7 +63,7 @@ def make_prediction(data_returns, data_prices, nb_of_forecast=1):
     forecast_prices = data_prices * (1 + forecast_return)
 
     # Index prediction
-    model = open_model('linear_model_v1.pickle')
+    model = open_model('linear_model_v2_1y.pickle')
     predictions = model.predict(forecast_prices)
 
     return predictions[-nb_of_forecast]

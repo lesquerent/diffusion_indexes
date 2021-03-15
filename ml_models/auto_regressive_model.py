@@ -170,20 +170,20 @@ if __name__ == '__main__':
     # main1()
     # main2()
     # DataFrame containing CAC40 stock returns, with NaN suppression per line
-    CAC40_Stocks_returns = create_stocks_df(const.tickers_CAC40_dict, '6mo')
+    CAC40_Stocks_returns = create_stocks_df_period(const.tickers_CAC40_dict, '1y')
 
     # Removal of values from the CAC40 index
     cac40_stocks_returns = CAC40_Stocks_returns.drop(['CAC40'], axis=1)
 
     # PCA with sklearn module
-    pca = decomposition.PCA(n_components=40).fit(cac40_stocks_returns)
+    pca = decomposition.PCA(n_components=cac40_stocks_returns.shape[1]).fit(cac40_stocks_returns)
 
     # Select_component, function that calculates the number of components such that x% of the information is explained
     nb_component = select_component(pca, 95)
 
-    array_of_principal_components = decomposition.PCA(n_components=40).fit(cac40_stocks_returns)
+    array_of_principal_components = decomposition.PCA(n_components=cac40_stocks_returns.shape[1]).fit(cac40_stocks_returns)
 
     array_of_principal_components = array_of_principal_components.transform(cac40_stocks_returns)
     model = create_var_model(array_of_principal_components)
 
-    global_models.save_model(model, 'saved_trained_models/var_model_v1.pickle')
+    global_models.save_model(model, 'saved_trained_models/var_model_v2_1y.pickle')

@@ -1,1 +1,0 @@
-web: gunicorn pi2_website.wsgi --log-file -
