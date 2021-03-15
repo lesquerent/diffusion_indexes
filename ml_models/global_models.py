@@ -73,7 +73,7 @@ def views_prediction(period='6mo'):
 
     # Removal of values from the CAC40 index
     _cac40_stocks_prices = _cac40_stocks_prices.drop(['CAC40'], axis=1)
-
+    dir = os.getcwd()
     _cac40_forecast = make_prediction(_cac40_stocks_returns, _cac40_stocks_prices, 1)
     print('Cac40 forecast : {}'.format(_cac40_forecast))
     return int(round(_cac40_forecast))
