@@ -73,6 +73,8 @@ def create_stocks_df(my_dict, period='1mo', data_type='returns', remove_nan_by='
         # Price data is retrieved at closing time
         data = yf.Ticker(value).history(period=period)["Close"]
 
+
+
         # If we want to recover the yields (in percentage)
         if data_type == 'returns':
             data = yf.Ticker(value).history(period=period)["Close"]
