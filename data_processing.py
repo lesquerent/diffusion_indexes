@@ -1,7 +1,5 @@
-import pandas as pd
 import yfinance as yf
-import annex.constants as const
-from ml_models.functions import save_model
+import pandas as pd
 
 
 def get_tickers_in_dict(excel_file_path, sheet_name_stock):
@@ -211,18 +209,31 @@ def create_stocks_df_period(my_dict, period='1mo', data_type='returns', remove_n
 
     return dataFrame
 
-
 if __name__ == '__main__':
     # Path to the excel file containing all the tickers
-    # BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    # file_path = os.path.join(BASE_DIR, os.path.basename('annex'))
-    # file_path = os.path.join(file_path, os.path.basename('ticker_stocks.xlsx'))
+    ticker_file_path = r"C:\Users\thiba\OneDrive - De Vinci\Documents\éducation\ESILV\2020-2021\S7\Pi2\ticker_stocks" \
+                       r".xlsx "
 
-    ticker_stocks = const.tickers_CAC40_dict
-    cac40_stocks_prices = create_stocks_df_date(ticker_stocks, start_date='2020-01-01', end_date='2021-03-15', data_type='prices')
-    print(cac40_stocks_prices)
-    cac40_stocks_returns = create_stocks_df_date(ticker_stocks, start_date='2020-01-01', end_date='2021-03-15', data_type='returns')
-    print(cac40_stocks_returns)
+    # Creation of the dictionary containing all the tickers
+    # tickers_CAC40_dict = get_tickers_in_dict(ticker_file_path, "CAC40V2")
+    # Delete CAC40 values in the dictionary
+    # del tickers_CAC40_dict['CAC40']
+    # print(tickers_CAC40_dict)
+    # tickers_SP500_dict=get_tickers_in_dict(ticker_file_path,"S&P500")
 
-    save_model(cac40_stocks_prices, 'cac40_stocks_prices_20_01_01_21_15_03.pickle')
-    save_model(cac40_stocks_returns, 'cac40_stocks_returns_20_01_01_21_15_03.pickle')
+    # ///////////CAC40 Data Collection\\\\\\\\\\\\
+
+    # DataFrame containing CAC40 yields, with NaN suppression per column
+    # df_CAC40_Returns_col=create_stocks_df(tickers_CAC40_dict,"5d",data_type='returns',remove_nan_by='col')
+
+    # DataFrame containing CAC40 yields, with NaN suppression per line
+    # df_CAC40_Returns_row = create_stocks_df(tickers_CAC40_dict, "2y", data_type='returns', remove_nan_by='row')
+
+    # DataFrame containing CAC40 prices, with NaN suppression per column
+    # df_CAC40_Price_col=create_stocks_df(tickers_CAC40_dict,"5d",data_type='prices',remove_nan_by='col')
+
+    # DataFrame containing CAC40 prices, with NaN suppression per line
+    # df_CAC40_Price_row=create_stocks_df(tickers_CAC40_dict,"5d",data_type='prices',remove_nan_by='row')
+
+    # //////// If you want to save the DataFrame data in an Excel file :
+    # df_CAC40_Returns_row.to_excel("CAC40_Returns.xlsx")
