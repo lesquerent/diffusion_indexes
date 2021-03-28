@@ -25,123 +25,87 @@ def get_tickers_in_dict(excel_file_path, sheet_name_stock):
     return tickers_dict
 
 
-def create_stocks_df(my_dict, period='1mo', data_type='returns', remove_nan_by='row'):
+def create_stocks_df(dict_of_ticker,end_date="2021-03-28", ug_pa_file_name='ug.csv'):
     """
+        Create and returns :
+            a dataFrame containing all stocks and CAC40 value
+            a dataFrame containing all stocks and CAC40 returns
 
     Parameters
     ----------
-    my_dict : dict
-        Dictionary containing key = Stock, value=ticker.
-    period : str
-        Corresponds to the period required to recover the prices.
-        valid periods: 1d,5d,1mo,3mo,6mo,1y,2y,5y,10y,ytd,max
-        Default: '1mo'
-    data_type : str
-        'returns' ou 'prices', cor corresponds to the type of data we want.
-        Default : 'returns'
-    remove_nan_by : str
-        'row' ou 'col' corresponds to the method of removal of NaN.
-        Default : 'row'
+    dict_of_ticker : dict
+        Dictionary containing key = Stock names, value=ticker..
+    ug_pa_file_path : TYPE
+        DESCRIPTION.
+    end_date : TYPE, optional
+        DESCRIPTION. The default is "2021-03-28".
 
     Returns
     -------
-    dataFrame : pd.DataFrame
-        Corresponds to a dataframe containing prices or returns at the close of the share for
+    data_value : pd.DataFrame
+        Corresponds to a dataframe containing values at the close of the stocks for
+        all dates of the selected period.
+    data_returns : pd.DataFrame
+        Corresponds to a dataframe containing returns at the close of the share for
         all dates of the selected period.
 
     """
+    start_date = "2020-01-01"
 
-    # //////Test on parameters\\\\\\#
-    try:
-        assert data_type == 'prices' or data_type == 'returns'
-    except AssertionError:
-        print("!!ERROR!! create_stocks_df accepts only data_type='prices' or data_type='returns' !!ERROR!!")
-        return
+    # Define the path of the UG.PA.csv file
+    BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    annex_folder = os.path.join(BASE_DIR, os.path.basename('annex'))
+    ug_pa_file_path = os.path.join(annex_folder, os.path.basename('ug.csv'))
+    ug_value = pd.read_csv(ug_pa_file_path, sep =';',header=0, index_col='Date',parse_dates=True)
 
-    try:
-        assert remove_nan_by == 'col' or remove_nan_by == 'row'
-    except AssertionError:
-        print("!!ERROR!! create_stocks_df accepts only suppr_nan_by ='col' or suppr_nan_by='row' !!ERROR!!")
-        return
+    # Define the ticker list base on the dictionnary of tickers
+    str_tickers =""
 
-    # //////Data recovery\\\\\\#
+    for key,value in tickers_cac40_dict.items():
+        str_tickers +="{} ".format(value)
 
-    dataFrame = pd.DataFrame()
+    # Take stocks value from yfinance
+    data_value = yf.download(str_tickers, start=start_date, end=end_date)["Close"]
 
-    # We browse the Tickers dictionary
-    for key, value in my_dict.items():
-        # Price data is retrieved at closing time
-        data = yf.Ticker(value).history(period=period)["Close"]
+    # Define the history bound of UG.PA
+    ug_index =ug_value.index
+    first_ug_date = ug_index[0]
+    last_ug_date = ug_index[-1]
 
+    # Replace STLA.PA by the corresponding UG.PA value before the fusion of PSA and STLA
+    data_value.loc[first_ug_date:last_ug_date,'STLA.PA'] = ug_value['UG.PA']
 
+    # Compute returns
+    data_returns = data_value.pct_change()
+    # Drop the first row fill off NaN cause by the returns computing
+    data_returns = data_returns.drop(first_ug_date, axis='index')
 
-        # If we want to recover the yields (in percentage)
-        if data_type == 'returns':
-            data = yf.Ticker(value).history(period=period)["Close"]
-            data = data.pct_change()
+    # Fill NaN by a linear interpolation along the columns
+    data_returns = data_returns.interpolate(method='linear', axis=1)
 
-        # Adds data in the form of yield or price depending on the chosen option
-        try:
-            dataFrame[key] = data
-        except ValueError:
-            print("INFO : L'action {key} ({value}) ne sera pas dans le data set.".format(key=key, value=value))
-
-    # //////Removal of NaN\\\\\\#
-    # If you want to delete columns that contain NaN
-    if remove_nan_by == 'col':
-        # If we are in the case of yield we must delete the first line because the calculation
-        # of yields induces NaN on the first line.
-        if data_type == 'returns':
-            # Look for lines that have NaN
-            index_with_nan = dataFrame.index[dataFrame.isnull().any(axis=1)].tolist()
-            # Removes the first one induced by the returns of the data frame
-            dataFrame.drop(index_with_nan[0], 0, inplace=True)
-            # Searches for columns that have NaN
-            column_with_nan = dataFrame.columns[dataFrame.isnull().any()].tolist()
-            # Deletes these columns
-            dataFrame.drop(column_with_nan, 1, inplace=True)
-
-        else:  # case data_type=prices
-            # Searches for columns that have NaN
-            column_with_nan = dataFrame.columns[dataFrame.isnull().any()].tolist()
-            # Deletes these columns
-            dataFrame.drop(column_with_nan, 1, inplace=True)
-
-    else:  # case remove_nan_by=='row'
-
-        # Look for lines that have NaN
-        index_with_nan = dataFrame.index[dataFrame.isnull().any(axis=1)].tolist()
-        # Removes the first one induced by the returns of the data frame
-        dataFrame.drop(index_with_nan, 0, inplace=True)
-
-    return dataFrame
-
+    return data_value,data_returns
 
 if __name__ == '__main__':
     # Path to the excel file containing all the tickers
-    ticker_file_path = r"C:\Users\thiba\OneDrive - De Vinci\Documents\éducation\ESILV\2020-2021\S7\Pi2\ticker_stocks" \
-                       r".xlsx "
+    ticker_file_path = r"C:\Users\thiba\OneDrive - De Vinci\Documents\éducation\ESILV\2020-2021\S8\pi2\diffusion_indexes\annex\ticker_stocks.xlsx "
 
     # Creation of the dictionary containing all the tickers
-    # tickers_CAC40_dict = get_tickers_in_dict(ticker_file_path, "CAC40V2")
+    # tickers_CAC40_dict = get_tickers_in_dict(ticker_file_path, "CAC40")
+    # print(tickers_CAC40_dict)
     # Delete CAC40 values in the dictionary
     # del tickers_CAC40_dict['CAC40']
     # print(tickers_CAC40_dict)
     # tickers_SP500_dict=get_tickers_in_dict(ticker_file_path,"S&P500")
 
-    # ///////////CAC40 Data Collection\\\\\\\\\\\\
 
-    # DataFrame containing CAC40 yields, with NaN suppression per column
-    # df_CAC40_Returns_col=create_stocks_df(tickers_CAC40_dict,"5d",data_type='returns',remove_nan_by='col')
+    # Create CAC40 stocks dataFrames
+    df_prices_returns = create_stocks_df(tickers_cac40_dict)
+    df_stocks_prices = df_prices_returns[0]
+    df_stocks_returns = df_prices_returns[1]
 
-    # DataFrame containing CAC40 yields, with NaN suppression per line
-    # df_CAC40_Returns_row = create_stocks_df(tickers_CAC40_dict, "2y", data_type='returns', remove_nan_by='row')
+    # Create CAC40 index dataFrames
+    df_index_value =df_stocks_prices['^FCHI']
+    df_index_returns = df_stocks_returns['^FCHI']
 
-    # DataFrame containing CAC40 prices, with NaN suppression per column
-    # df_CAC40_Price_col=create_stocks_df(tickers_CAC40_dict,"5d",data_type='prices',remove_nan_by='col')
-
-    # DataFrame containing CAC40 prices, with NaN suppression per line
-    # df_CAC40_Price_row=create_stocks_df(tickers_CAC40_dict,"5d",data_type='prices',remove_nan_by='row')
-
-    # //////// If you want to save the DataFrame data in an Excel file :
-    # df_CAC40_Returns_row.to_excel("CAC40_Returns.xlsx")
+    del df_stocks_prices['^FCHI']
+    del df_stocks_returns['^FCHI']
