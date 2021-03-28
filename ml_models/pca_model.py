@@ -26,17 +26,17 @@ def select_component(pca_data, percent):
     return index
 
 
-def create_principal_components_array(dict_of_tickers, history_period='3mo'):
+def create_principal_components_array(dict_of_tickers, end_date="2021-03-29"):
     """
 
     Parameters
     ----------
     dict_of_tickers : dict
         Dictionary containing key = Stock, value=ticker.
-    history_period : str
-        Corresponds to the period required to recover the prices.
-        valid periods: 1d,5d,1mo,3mo,6mo,1y,2y,5y,10y,ytd,max
-        Default: '3mo'
+    end_date : str
+        Corresponds to the last date of the historic needed.
+        Format : "YYYY-MM-DD"
+        Default: "2021-03-29"
 
     Returns
     -------
@@ -45,19 +45,18 @@ def create_principal_components_array(dict_of_tickers, history_period='3mo'):
 
     """
 
-    # DataFrame containing CAC40 stock returns, with NaN suppression per line
-    CAC40_Stocks_returns = create_stocks_df(dict_of_tickers, history_period)
-
-    # Removal of values from the CAC40 index
-    cac40_stocks_returns = CAC40_Stocks_returns.drop(['CAC40'], axis=1)
+    # DataFrame containing CAC40 stock returns
+    df_cac40_prices_returns = create_stocks_df(dict_of_tickers, end_date="2021-03-29")
+    cac40_stocks_returns = df_cac40_prices_returns[1]
+    del cac40_stocks_returns['^FCHI']
 
     # PCA with sklearn module
-    pca = decomposition.PCA(n_components=31).fit(cac40_stocks_returns)
+    pca = decomposition.PCA(n_components=cac40_stocks_returns.shape[1]).fit(cac40_stocks_returns)
 
     # Select_component, function that calculates the number of components such that x% of the information is explained
     nb_component = select_component(pca, 95)
 
-    array_of_principal_components = decomposition.PCA(n_components=5).fit(cac40_stocks_returns)
+    array_of_principal_components = decomposition.PCA(n_components=nb_component).fit(cac40_stocks_returns)
     array_of_principal_components = array_of_principal_components.transform(cac40_stocks_returns)
 
     return array_of_principal_components
@@ -83,27 +82,26 @@ def marchenko_pastur_pdf1(l, Q):
         # Element wise maximum of (a,0)
         return np.maximum(a, np.zeros_like(a))
 
-    l_plus = (1 + (1/Q) ** 0.5) ** 2
-    l_min = (1 - (1/Q) ** 0.5) ** 2
+    l_plus = (1 + (1 / Q) ** 0.5) ** 2
+    l_min = (1 - (1 / Q) ** 0.5) ** 2
     return Q * np.sqrt(m0(l_plus - l) * m0(l - l_min)) / (2 * np.pi * l)
 
 
 def principal_component(dict_of_tickers, history_period='3mo'):
-
     # DataFrame containing CAC40 stock returns, with NaN suppression per line
-    CAC40_Stocks_returns = create_stocks_df(dict_of_tickers, history_period)
+    df_cac40_prices_returns = create_stocks_df(dict_of_tickers, end_date="2021-03-29")
+    cac40_stocks_returns = df_cac40_prices_returns[1]
 
-    # Removal of values from the CAC40 index
-    cac40_stocks_returns = CAC40_Stocks_returns.drop(['CAC40'], axis=1)
+    del cac40_stocks_returns['^FCHI']
 
     # PCA with sklearn module
-    pca = decomposition.PCA(n_components=31).fit(cac40_stocks_returns)
+    pca = decomposition.PCA(n_components=cac40_stocks_returns.shape[1]).fit(cac40_stocks_returns)
 
     # Correlation matrix
-    cor_matrix = CAC40_Stocks_returns.interpolate().corr()
+    cor_matrix = cac40_stocks_returns.interpolate().corr()
 
     # M : number of line and  N : number de column
-    M, N = CAC40_Stocks_returns.shape
+    M, N = cac40_stocks_returns.shape
     Q = M / N
 
     print(M, N)
@@ -124,11 +122,8 @@ def principal_component(dict_of_tickers, history_period='3mo'):
     return array_of_PC
 
 
-
 if __name__ == '__main__':
-
-    period = '3mo'  # Period of history (valid periods: 1d,5d,1mo,3mo,6mo,1y,2y,5y,10y,ytd,max)
+    last_date = "2021-03-29"
     # np.array containing the principal components :
-    array_of_principal_component = principal_component(const.tickers_CAC40_dict, period)
-
-
+    array_of_principal_component = create_principal_components_array(const.tickers_cac40_dict_2, last_date)
+    print(array_of_principal_component.shape)

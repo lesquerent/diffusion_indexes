@@ -16,7 +16,7 @@ tickers_CAC40_dict = {
 						}
 
 
-tickers_CAC40_dict_2 = {
+tickers_cac40_dict_2 = {
 						'Air Liquide': 'AI.PA', 'Airbus': 'AIR.PA', 
 						'Alstom': 'ALO.PA', 'ArcelorMittal': 'MT.AS', 'Atos': 'ATO.PA',
 						'AXA': 'CS.PA', 'BNP Paribas': 'BNP.PA', 'Bouygues': 'EN.PA', 

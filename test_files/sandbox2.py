@@ -1,31 +1,9 @@
+# -*- coding: utf-8 -*-
+
 import yfinance as yf
 import pandas as pd
 import os
-
 from annex import constants as const
-
-
-def get_tickers_in_dict(excel_file_path, sheet_name_stock):
-    """
-
-
-    Parameters
-    ----------
-    excel_file_path : str
-        Path of the excel file containing the tickers.
-    sheet_name_stock : str
-        Name of the excel sheet where the tickers are located.
-
-    Returns
-    -------
-    tickers_dict : dict
-        Dictionary containing key = Stock, value=ticker.
-
-    """
-
-    tickers_dict = pd.read_excel(excel_file_path, usecols="A,C", sheet_name=sheet_name_stock, index_col=0)[
-        "Ticker"].to_dict()
-    return tickers_dict
 
 
 def create_stocks_df(dict_of_ticker, end_date="2021-03-28", ug_pa_file_name='ug.csv'):
@@ -38,10 +16,10 @@ def create_stocks_df(dict_of_ticker, end_date="2021-03-28", ug_pa_file_name='ug.
     ----------
     dict_of_ticker : dict
         Dictionary containing key = Stock names, value=ticker..
-    ug_pa_file_name : str
-        Name of the file containing UG.PA data. The default is 'ug.csv'
-    end_date : str, optional
-        The date until we take data. Format : 'YYYY-MM-DD' The default is "2021-03-28".
+    ug_pa_file_path : TYPE
+        DESCRIPTION.
+    end_date : TYPE, optional
+        DESCRIPTION. The default is "2021-03-28".
 
     Returns
     -------
@@ -56,8 +34,8 @@ def create_stocks_df(dict_of_ticker, end_date="2021-03-28", ug_pa_file_name='ug.
     start_date = "2020-01-01"
 
     # Define the path of the UG.PA.csv file
-    PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
-    annex_folder = os.path.join(PROJECT_ROOT, os.path.basename('annex'))
+    BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    annex_folder = os.path.join(BASE_DIR, os.path.basename('annex'))
     ug_pa_file_path = os.path.join(annex_folder, os.path.basename('ug.csv'))
     ug_value = pd.read_csv(ug_pa_file_path, sep=';', header=0, index_col='Date', parse_dates=True)
 
@@ -90,10 +68,9 @@ def create_stocks_df(dict_of_ticker, end_date="2021-03-28", ug_pa_file_name='ug.
 
 
 if __name__ == '__main__':
-
     # Create CAC40 stocks dataFrames
     tickers_cac40_dict = const.tickers_cac40_dict_2
-    df_prices_returns = create_stocks_df(tickers_cac40_dict, end_date="2021-03-29")
+    df_prices_returns = create_stocks_df(tickers_cac40_dict)
     df_stocks_prices = df_prices_returns[0]
     df_stocks_returns = df_prices_returns[1]
 
@@ -103,4 +80,4 @@ if __name__ == '__main__':
 
     del df_stocks_prices['^FCHI']
     del df_stocks_returns['^FCHI']
-    print(df_index_value)
+
