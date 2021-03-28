@@ -35,10 +35,10 @@ def create_stocks_df(dict_of_ticker,end_date="2021-03-28", ug_pa_file_name='ug.c
     ----------
     dict_of_ticker : dict
         Dictionary containing key = Stock names, value=ticker..
-    ug_pa_file_path : TYPE
-        DESCRIPTION.
-    end_date : TYPE, optional
-        DESCRIPTION. The default is "2021-03-28".
+    ug_pa_file_name : str
+        Name of the file containing UG.PA data. The default is 'ug.csv'
+    end_date : str, optional
+        The date until we take data. Format : 'YYYY-MM-DD' The default is "2021-03-28".
 
     Returns
     -------
