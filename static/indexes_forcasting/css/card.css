@@ -26,3 +26,10 @@ body{
 #global-card{
 	background-color:#5460D0;
 }
+
+.center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
+}

@@ -81,6 +81,12 @@ def home(request):
     return render(request, 'indexes_forcasting/home/home.html', context)
 
 
+def home1(request):
+    context = {}
+
+    return render(request, 'indexes_forcasting/home/home1.html', context)
+
+
 # ----- Not here
 def line_chart(request):
     PERIOD = '1y'

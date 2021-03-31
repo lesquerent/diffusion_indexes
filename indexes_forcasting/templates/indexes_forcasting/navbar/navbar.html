@@ -1,4 +1,5 @@
 {% url 'home' as home %}
+{% url 'home1' as home1 %}
 {% url 'line_chart' as line_chart %}
 {% url 'line_chart2' as line_chart2 %}
 
@@ -6,7 +7,11 @@
             <ul class="show-dropdown main-navbar">
                 <div class="selector-active"><div class="top"></div><div class="bottom"></div></div>
                 <li>
-                    <a href="{% url 'home' %}"><i class="fas fa-search-dollar"></i>Forcast app</a>
+                    <a href="{% url 'home1' %}"><img  src="http://127.0.0.1:8000/static/indexes_forcasting/logo/logo_diffusion_indexes_v2.png"
+                      alt="Logo diffusion indexes" width=80%></i></a>
+                </li>
+                <li class="{% if request.path == home1 %} active {% endif %}">
+                    <a href="{% url 'home1' %}"><i class="fas fa-search-dollar"></i>Forcast app</a>
                 </li>
                 <li class="{% if request.path == home %} active {% endif %}">
                     <a href="{% url 'home' %}"><i class="fas fa-tachometer-alt"></i>Index value</a>
