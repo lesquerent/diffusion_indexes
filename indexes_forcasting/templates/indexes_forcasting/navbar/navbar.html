@@ -2,12 +2,12 @@
 {% url 'home1' as home1 %}
 {% url 'line_chart' as line_chart %}
 {% url 'line_chart2' as line_chart2 %}
-
+{% load static %}
 <div id="accordian">
             <ul class="show-dropdown main-navbar">
                 <div class="selector-active"><div class="top"></div><div class="bottom"></div></div>
                 <li>
-                    <a href="{% url 'home1' %}"><img  src="http://127.0.0.1:8000/static/indexes_forcasting/logo/logo_diffusion_indexes_v2.png"
+                    <a href="{% url 'home1' %}"><img  src="{% static 'indexes_forcasting/logo/logo_diffusion_indexes_v2.png' %}"
                       alt="Logo diffusion indexes" width=80%></i></a>
                 </li>
                 <li class="{% if request.path == home1 %} active {% endif %}">
