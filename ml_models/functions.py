@@ -91,34 +91,28 @@ def create_saved_df(last_date, stocks_value_file_name, stocks_returns_file_name,
     save_data(df_index_returns, index_returns_file_name)
 
 
-def update_data(dict_of_tickers, stocks_value_file_name, stocks_returns_file_name, index_value_file_name,
-                index_returns_file_name, last_date):
-    # ----- Open files
-    stocks_value_file_df = open_data(stocks_value_file_name)
-    stocks_returns_file_df = open_data(stocks_returns_file_name)
-    index_value_file_df = open_data(index_value_file_name)
-    index_returns_file_df = open_data(index_returns_file_name)
-
+def update_data(dict_of_tickers, stocks_value_file_df, stocks_returns_file_df, index_value_file_df,
+                index_returns_file_df):
     # ----- Update dataframe
     update_df = update_stocks_df(dict_of_tickers, stocks_value_file_df, stocks_returns_file_df, index_value_file_df,
-                                 index_returns_file_df, last_date)
+                                 index_returns_file_df)
 
     # ----- Save dataframe
-    save_data(update_df[0], stocks_value_file_name)
-    save_data(update_df[1], stocks_returns_file_name)
-    save_data(update_df[2], index_value_file_name)
-    save_data(update_df[3], index_returns_file_name)
+    save_data(update_df[0], 'df_stocks_prices.pickle')
+    save_data(update_df[1], 'df_stocks_returns.pickle')
+    save_data(update_df[2], 'df_index_value.pickle')
+    save_data(update_df[3], 'df_index_returns.pickle')
     return update_df[0], update_df[1], update_df[2], update_df[3]
 
 
 if __name__ == '__main__':
     # last_date_ = datetime.datetime.strptime(datetime.datetime.today().strftime('%Y-%m-%d'),
     #                                         '%Y-%m-%d')  # + datetime.timedelta(days=1)
-    # file_name_stocks_v = 'df_stocks_prices'
-    # file_name_stocks_r = 'df_stocks_returns'
-    # file_name_index_v = 'df_index_value'
-    # file_name_index_r = 'df_index_returns'
-    # create_saved_df(last_date_, file_name_stocks_v, file_name_stocks_r, file_name_index_v, file_name_index_r)
+    file_name_stocks_v = 'df_stocks_prices'
+    file_name_stocks_r = 'df_stocks_returns'
+    file_name_index_v = 'df_index_value'
+    file_name_index_r = 'df_index_returns'
+    create_saved_df('2021-03-01', file_name_stocks_v, file_name_stocks_r, file_name_index_v, file_name_index_r)
     #
     # df_s_p = open_data('df_stocks_prices.pickle')
     # df_s_r = open_data('df_stocks_returns.pickle')

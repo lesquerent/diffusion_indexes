@@ -92,26 +92,26 @@ def create_stocks_df(dict_of_ticker, end_date="2021-03-28", ug_pa_file_name='ug.
 
 
 def update_stocks_df(dict_of_ticker, data_stocks_values, data_stocks_returns, data_index_values, data_index_returns,
-                     end_date="2021-03-28"):
-
+                     ):
     # Define the ticker list base on the dictionary of tickers
     str_tickers = ""
 
     for key, value in dict_of_ticker.items():
         str_tickers += "{} ".format(value)
 
-    start_date = data_stocks_values.index[-1]
-    # end_date = datetime.datetime.today().strftime('%Y-%m-%d')
+    start_date = data_stocks_values.index[-1].strftime('%Y-%m-%d')
+    end_date = datetime.datetime.today() + datetime.timedelta(days=1)
+    end_date = end_date.strftime('%Y-%m-%d')
 
     # Take stocks value from yfinance
     data_value = yf.download(str_tickers, start=start_date, end=end_date)["Close"]
 
     # Compute returns
     data_returns = data_value.pct_change()
-    print(data_returns)
     # Drop the first row fill off NaN cause by the returns computing
-    data_returns = data_returns.drop(start_date, axis='index')
+    date_to_remove = data_returns.index[0].strftime('%Y-%m-%d')
 
+    data_returns = data_returns.drop(data_returns.index[0], axis=0)
     # Fill NaN by a linear interpolation along the columns
     data_returns = data_returns.interpolate(method='linear', axis=1)
 
@@ -120,14 +120,11 @@ def update_stocks_df(dict_of_ticker, data_stocks_values, data_stocks_returns, da
 
     index_value = data_value['^FCHI']
     del data_value['^FCHI']
-
-    updated_stocks_value = pd.concat([data_stocks_values, data_value])
+    updated_stocks_value = pd.concat([data_stocks_values, data_value[1:]])
     updated_stocks_returns = pd.concat([data_stocks_returns, data_returns])
 
-    updated_index_value = pd.concat([data_index_values, index_value])
+    updated_index_value = pd.concat([data_index_values, index_value[1:]])
     updated_index_returns = pd.concat([data_index_returns, index_returns])
-
-    # print(updated_index_returns)
 
     return updated_stocks_value, updated_stocks_returns, updated_index_value, updated_index_returns
 
@@ -135,7 +132,7 @@ def update_stocks_df(dict_of_ticker, data_stocks_values, data_stocks_returns, da
 if __name__ == '__main__':
     # Create CAC40 stocks dataFrames
     tickers_cac40_dict = const.tickers_cac40_dict_2
-    df_prices_returns = create_stocks_df(tickers_cac40_dict, end_date="2021-03-29")
+    df_prices_returns = create_stocks_df(tickers_cac40_dict, end_date="2021-03-30")
     df_stocks_prices = df_prices_returns[0]
     df_stocks_returns = df_prices_returns[1]
 

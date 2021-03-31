@@ -186,7 +186,7 @@ if __name__ == '__main__':
     del df_stocks_prices['^FCHI']
     del df_stocks_returns['^FCHI']
     nb_days = 30
-    nb_pred = 1
+    nb_pred = 5
     pred_test = make_past_prediction_v5(nb_days, nb_pred, df_stocks_prices, df_stocks_returns, df_index_value,
                                         df_index_returns)
     pred_test_prices = pred_test[0]

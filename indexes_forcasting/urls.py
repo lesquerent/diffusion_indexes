@@ -7,4 +7,5 @@ urlpatterns = [
     path('line_chart/', views.line_chart, name='line_chart'),
     path('line_chart_pred_cac', views.line_chart2, name='line_chart2'),
     path('', views.home1, name='home1'),
+    path('method', views.method, name='method'),
 ]

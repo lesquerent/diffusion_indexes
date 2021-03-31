@@ -14,24 +14,23 @@ df_stocks_returns = open_data('df_stocks_returns.pickle')
 df_index_value = open_data('df_index_value.pickle')
 df_index_returns = open_data('df_index_returns.pickle')
 
+
 # ----- Load history
 df_history_of_forecast_prices = open_data('df_history_of_forecast_prices.pickle')
 df_history_of_forecast_returns = open_data('df_history_of_forecast_returns.pickle')
 # ----- Make prediction
 predictions = make_predictions(1, df_stocks_prices, df_stocks_returns, df_index_value, df_index_returns)
-
 # # ----- Check update
-# if need_update('df_stocks_prices.pickle'):
-#     df_history_of_forecast_prices.loc[predictions[0].index[-1]] = predictions[0].values[-1]
-#     save_data(df_history_of_forecast_prices, 'df_history_of_forecast_prices.pickle')
-#
-#     df_history_of_forecast_returns.loc[predictions[0].index[-1]] = predictions[1].values[-1]
-#     save_data(df_history_of_forecast_returns, 'df_history_of_forecast_returns.pickle')
-#
-#     last_date_known = df_stocks_prices.index[-1]
-#     update_data(const.tickers_cac40_dict_2, 'df_stocks_prices.pickle', 'df_stocks_returns.pickle', 'df_index_value'
-#                                                                                                    '.pickle',
-#                 'df_index_returns.pickle', last_date_known)
+if need_update('df_stocks_prices.pickle'):
+    # ----- Add old prediction to the historic
+    df_history_of_forecast_prices.loc[predictions[0].index[-1]] = predictions[0].values[-1]
+    save_data(df_history_of_forecast_prices, 'df_history_of_forecast_prices.pickle')
+
+    df_history_of_forecast_returns.loc[predictions[0].index[-1]] = predictions[1].values[-1]
+    save_data(df_history_of_forecast_returns, 'df_history_of_forecast_returns.pickle')
+
+    # ----- Update data
+    update_data(const.tickers_cac40_dict_2, df_stocks_prices, df_stocks_returns, df_index_value, df_index_returns)
 
 
 def home(request):
@@ -86,6 +85,10 @@ def home1(request):
 
     return render(request, 'indexes_forcasting/home/home1.html', context)
 
+def method(request):
+    context = {}
+
+    return render(request, 'indexes_forcasting/method/method.html', context)
 
 # ----- Not here
 def line_chart(request):
@@ -134,6 +137,7 @@ def line_chart2(request):
     labels = list(df_history_of_forecast_returns.index)
     labels = [elem.strftime('%Y-%m-%d') for elem in labels]
     data1 = list(np.round(df_index_value[labels[1]:labels[-1]].values, 2))
+    print(data1)
     data2 = list(np.round(df_history_of_forecast_returns.values[:, 0], 2))
     # data3 = list(np.round(df_history_of_forecast_prices.values[:, 0], 2))
 
