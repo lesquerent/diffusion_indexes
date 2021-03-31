@@ -58,8 +58,6 @@ def open_data(file_name):
 def need_update(data_file_name):
     data = open_data(data_file_name)
     current_date = datetime.datetime.strptime(datetime.datetime.today().strftime('%Y-%m-%d'), '%Y-%m-%d')
-    print(data.index[-1])
-    print(current_date)
     data_need_update = False
     if datetime.datetime.today().weekday() < 5 and datetime.datetime.today().hour >= 18 and data.index[
         -1] != current_date:
